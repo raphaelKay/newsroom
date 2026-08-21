@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('user_uidentity', 10)->unique();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname', 100);
+            $table->string('lastname', 100);
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female']);
             $table->enum('status', ['registered', 'active', 'suspended', 'banned'])->default('registered');

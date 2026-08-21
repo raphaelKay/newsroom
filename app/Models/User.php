@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,11 +33,11 @@ use App\Traits\HasUIdentity;
  * @property Carbon|null $updated_at
  */
 #[Fillable(['user_uidentity', 'firstname', 'lastname', 'gender', 'email', 'password'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
+#[Hidden(['id', 'password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token', 'user_uidentity', 'email_verified_at', 'created_at', 'updated_at', 'deleted_at'])]
 class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles, HasUIdentity;
+    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles, HasUIdentity, SoftDeletes;
 
     protected $uidentity_column = 'user_uidentity';
 
@@ -48,25 +50,12 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'id',
-        'user_uidentity',
-        'email_verified_at',
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     /**
      * Get the user's initials
