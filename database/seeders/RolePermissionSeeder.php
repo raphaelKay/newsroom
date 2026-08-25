@@ -27,7 +27,9 @@ class RolePermissionSeeder extends Seeder
             'moderate article',
             'moderate editor',
             'moderate author',
+            'moderate category',
             'moderate comment',
+            'moderate tag',
             'can comment',
             'react',
         ];
@@ -45,7 +47,9 @@ class RolePermissionSeeder extends Seeder
         Role::findByName('editor')->syncPermissions([
             'moderate article',
             'moderate author',
+            'moderate category',
             'moderate comment',
+            'moderate tag',
             'can comment',
             'react',
         ]);

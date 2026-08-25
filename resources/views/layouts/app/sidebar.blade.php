@@ -6,7 +6,7 @@
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.header>
-                <x-app-logo :sidebar="true" href="{{ route('home') }}" wire:navigate />
+                <x-app-logo :sidebar="true" href="{{ route('pages.home') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
             </flux:sidebar.header>
 
@@ -15,6 +15,18 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+
+                    @can('moderate category')
+                    <flux:sidebar.item icon="squares-2x2" :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>
+                        {{ __('Categories') }}
+                    </flux:sidebar.item>
+                    @endcan
+
+                    @can('moderate tag')
+                    <flux:sidebar.item icon="tag" :href="route('tags.index')" :current="request()->routeIs('tags.*')" wire:navigate>
+                        {{ __('Tags') }}
+                    </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

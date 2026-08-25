@@ -18,6 +18,7 @@ use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Traits\HasUIdentity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * @property int $id
@@ -73,5 +74,15 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
     public function getNameAttribute (): string
     {
         return $this->firstname . ' ' . $this->lastname;
+    }
+
+    /**
+     * Accessor allowing $user->is_admin property syntax.
+     */
+    protected function isSuperAdministrator(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->hasRole('super-administrator'),
+        );
     }
 }

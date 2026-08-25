@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use App\Traits\HasSlug;
 use App\Traits\HasUIdentity;
 
-#[Fillable(['category_uidentity', 'name', 'slug', 'parent_id'])]
+#[Fillable(['category_uidentity', 'name', 'slug', 'parent_id', 'created_by'])]
 #[Hidden(['id', 'category_uidentity'])]
 class Category extends Model
 {
@@ -32,5 +33,9 @@ class Category extends Model
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    public function articles(): HasMany {
+        return $this->hasMany(Article::class);
     }
 }
