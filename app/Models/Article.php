@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Traits\HasSlug;
 use App\Traits\HasUIdentity;
 
@@ -20,6 +21,9 @@ class Article extends Model
 {
     /** @use HasFactory<\Database\Factories\ArticleFactory> */
     use HasFactory, HasSlug, HasUIdentity, SoftDeletes;
+
+    protected $uidentity_column = 'article_uidentity';
+    protected $slug_source = 'title';
 
     /**
      * Get the attributes that should be cast.
@@ -38,7 +42,7 @@ class Article extends Model
     }
 
     public function author(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'author_id')->withTrashed();
     }
 
     public function category(): BelongsTo {
@@ -53,11 +57,40 @@ class Article extends Model
         return $this->hasMany(ArticleView::class);
     }
 
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
+    }
+
     public function scopePublished(Builder $query): Builder {
         return $query->where('status', 'published')->where('published_at', '<=', now());
     }
 
     public function getReadingTimeAttribute(): int {
         return (int) ceil(str_word_count( strip_tags( $this->body)) / 200);
+    }
+
+    public function getWordCountAttribute(): int
+    {
+        return str_word_count(strip_tags($this->body ?? ''));
+    }
+
+    protected function formattedReadingTime(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $words = str_word_count(strip_tags($this->body ?? ''));
+                $wpm = 200;
+
+                // If under 200 words, return duration in seconds
+                if ($words < $wpm) {
+                    $seconds = max(1, (int) round(($words / $wpm) * 60));
+                    return "{$seconds} Sec";
+                }
+
+                // Otherwise, return duration in minutes (rounded up)
+                $minutes = (int) ceil($words / $wpm);
+                return "{$minutes} Min";
+            }
+        );
     }
 }

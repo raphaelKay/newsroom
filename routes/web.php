@@ -29,7 +29,7 @@ Route::group(['prefix' => 'a', 'as' => 'articles.', 'middleware' => []], functio
         Route::get('{article:slug}', 'show')->name('show');
 
         // admin routes to manage articles
-        Route::middleware(['auth', 'verified', 'role:editor'])->group(function() {
+        Route::middleware(['auth', 'verified', 'role:super-administrator|editor'])->group(function() {
             Route::get('', 'index')->middleware(['permission:moderate articles'])->name('index');
 
             Route::get('{article:slug}/dashboard', 'dashboard')->middleware(['permission:moderate articles'])->name('dashboard');
@@ -37,7 +37,7 @@ Route::group(['prefix' => 'a', 'as' => 'articles.', 'middleware' => []], functio
             Route::get('create', 'create')->name('create');
             Route::get('{article:slug}/edit', 'edit')->name('edit');
 
-            Route::post('{article:slug}/store', 'store')->name('store');
+            Route::post('store', 'store')->name('store');
             Route::put('{article:slug}/update', 'update')->name('update');
 
             Route::delete('{article:slug}/delete', 'delete')->name('delete');
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'comment', 'as' => 'comments.', 'middleware' => []], f
         Route::pattern('comment', '^(?!create|new$)([a-zA-Z0-9-]+)$');
 
         // routes to show comments and related products
-        Route::get('{comment:aomment_uidentity}', 'show')->name('show');
+        Route::get('{comment:comment_uidentity}', 'show')->name('show');
 
         // route to add new comment
         Route::get('new', 'new')->name('new');
@@ -103,14 +103,14 @@ Route::group(['prefix' => 'comment', 'as' => 'comments.', 'middleware' => []], f
         Route::middleware(['auth', 'verified', 'role:role:super-administrator|editor'])->group(function() {
             Route::get('', 'index')->middleware(['permission:moderate comments'])->name('index');
 
-            Route::get('{comment:aomment_uidentity}/dashboard', 'dashboard')->middleware(['permission:moderate comments'])->name('dashboard');
+            Route::get('{comment:comment_uidentity}/dashboard', 'dashboard')->middleware(['permission:moderate comments'])->name('dashboard');
 
-            Route::get('{comment:aomment_uidentity}/edit', 'edit')->name('edit');
+            Route::get('{comment:comment_uidentity}/edit', 'edit')->name('edit');
 
-            Route::post('{comment:aomment_uidentity}/store', 'store')->name('store');
-            Route::put('{comment:aomment_uidentity}/update', 'update')->name('update');
+            Route::post('{comment:comment_uidentity}/store', 'store')->name('store');
+            Route::put('{comment:comment_uidentity}/update', 'update')->name('update');
 
-            Route::delete('{comment:aomment_uidentity}/delete', 'delete')->name('delete');
+            Route::delete('{comment:comment_uidentity}/delete', 'delete')->name('delete');
         });
     });
 });

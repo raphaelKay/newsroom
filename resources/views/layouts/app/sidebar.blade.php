@@ -16,6 +16,12 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
 
+                    @can('moderate article')
+                    <flux:sidebar.item icon="newspaper" :href="route('articles.index')" :current="request()->routeIs('articles.*')" wire:navigate>
+                        {{ __('Articles') }}
+                    </flux:sidebar.item>
+                    @endcan
+
                     @can('moderate category')
                     <flux:sidebar.item icon="squares-2x2" :href="route('categories.index')" :current="request()->routeIs('categories.*')" wire:navigate>
                         {{ __('Categories') }}

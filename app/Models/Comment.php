@@ -19,6 +19,8 @@ class Comment extends Model
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory, HasRecursiveRelationships, HasUIdentity, SoftDeletes;
 
+    protected $uidentity_column = 'comment_uidentity';
+
     /**
      * Get the attributes that should be cast.
      *
