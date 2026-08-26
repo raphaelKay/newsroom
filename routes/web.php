@@ -107,7 +107,7 @@ Route::group(['prefix' => 'comment', 'as' => 'comments.', 'middleware' => []], f
 
             Route::get('{comment:comment_uidentity}/edit', 'edit')->name('edit');
 
-            Route::post('{comment:comment_uidentity}/store', 'store')->name('store');
+            Route::post('store', 'store')->name('store');
             Route::put('{comment:comment_uidentity}/update', 'update')->name('update');
 
             Route::delete('{comment:comment_uidentity}/delete', 'delete')->name('delete');

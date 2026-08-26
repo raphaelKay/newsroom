@@ -61,6 +61,11 @@ class Article extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function gallery(): HasMany
+    {
+        return $this->hasMany(ArticleGallery::class)->orderBy('display_order');
+    }
+
     public function scopePublished(Builder $query): Builder {
         return $query->where('status', 'published')->where('published_at', '<=', now());
     }

@@ -31,7 +31,9 @@ class ArticleController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        return view('articles.show', ['article' => $article]);
+        $comments = $article->comments()->whereNull('parent_id')->with(['author', 'replies.author'])->latest()->paginate(5);
+
+        return view('articles.show', ['article' => $article, 'comments' => $comments]);
     }
 
     public function create(Request $request) {

@@ -290,6 +290,30 @@
 
     </div>
 
+    <div class="space-y-8 max-w-7xl mx-auto">
+        @foreach($article->gallery as $item)
+            <div class="media-card">
+                @if($item->media instanceof \App\Models\ArticleImage)
+                    <img 
+                        src="{{ $item->media->url }}" 
+                        alt="{{ $item->media->alt_text }}" 
+                        width="{{ $item->media->width }}" 
+                        height="{{ $item->media->height }}"
+                    />
+                @elseif($item->media instanceof \App\Models\ArticleVideo)
+                    <video controls>
+                        <source src="{{ $item->media->url }}" type="{{ $item->media->mime_type }}">
+                    </video>
+                    <span class="badge">{{ $item->media->duration_seconds }}s</span>
+                @endif
+
+                @if($item->caption)
+                    <p>{{ $item->caption }}</p>
+                @endif
+            </div>
+        @endforeach
+    </div>
+
     {{-- Flux Confirmation Modal --}}
     <flux:modal name="delete-article" class="md:w-96 space-y-6">
         <div>
